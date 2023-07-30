@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
-import { isLoggedInState, userNameState, backendHostInURL } from '../state_management/recoilState';
+import { userNameState, backendHostInURL, accessTokenState } from '../state_management/recoilState';
 import { LoginFailed } from './LoginFailed';
 interface LoginResponse {
     accessToken: string;
@@ -10,8 +10,8 @@ interface LoginResponse {
 
 
 const LoginPage: React.FC = () => {
-    const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState)
     const [username, setUsername] = useRecoilState(userNameState);
+    const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
 
     const [loginFailed, setLoginFailed] = useState(false)
     const [password, setPassword] = useState('');
@@ -20,12 +20,11 @@ const LoginPage: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // If the user is already logged in, redirect to the upload page
-        if (isLoggedIn) {
+        if (accessToken) {
             console.log("logged in!");
         }
         performHealthCheck();
-    }, [isLoggedIn, navigate]);
+    }, [accessToken, navigate]);
 
     const handleLogin = (event: React.FormEvent) => {
         event.preventDefault();
@@ -43,7 +42,7 @@ const LoginPage: React.FC = () => {
 
                 if (response.data.accessToken) {
                     console.log('Login successful:', response.data);
-                    setIsLoggedIn(true);
+                    setAccessToken(response.data.accessToken);
                     localStorage.setItem('accessToken', response.data.accessToken);
                     localStorage.setItem('username', username);
                 } else {
