@@ -8,6 +8,11 @@ function getToken(): string | null {
     return userToken ?? null;
 }
 
+function getIsAdmin(): Boolean {
+    const isAdmin = localStorage.getItem("isAdmin");
+    return isAdmin?.toLowerCase() === 'true';
+}
+
 export const accessTokenState = atom({
     key: "accessTokenState",
     default: getToken(),
@@ -16,4 +21,9 @@ export const accessTokenState = atom({
 export const userNameState = atom<string>({
     key: 'userNameState',
     default: ''
+})
+
+export const isAdminState = atom<Boolean>({
+    key: 'isAdminState',
+    default: getIsAdmin()
 })
