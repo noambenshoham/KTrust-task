@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import userSvg from '../assets/user.svg';
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userNameState, accessTokenState, backendHostInURL, isAdminState } from '../state_management/recoilState';
 import axios from 'axios';
@@ -27,8 +27,6 @@ const UserPage: React.FC = () => {
                 },
             })
                 .then((response) => {
-                    console.log(response.data);
-
                     if (response.data.isAdmin !== undefined) {
                         setIsAdmin(response.data.isAdmin);
                         localStorage.setItem('isAdmin', isAdmin.toString());
@@ -46,7 +44,7 @@ const UserPage: React.FC = () => {
             <div className="text-center">
                 <img src={userSvg} alt="User Icon" className="user-profile-img" />
                 <div>
-                    {isAdmin ? <span>Hello admin</span> : null}
+                    {isAdmin ? <div>Hello admin</div> : null}
                     Username:
                 </div>
             </div>
