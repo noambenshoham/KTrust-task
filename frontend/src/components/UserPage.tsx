@@ -5,7 +5,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { userNameState, accessTokenState, backendHostInURL, isAdminState } from '../state_management/recoilState';
 import axios from 'axios';
 import ShowUsers from './ShowUsers';
-import CreateUser from './CreateUser';
+import CreateUser from './admin_components/CreateUser';
 
 interface isAdminResponse {
     isAdmin: Boolean

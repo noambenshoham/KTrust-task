@@ -7,9 +7,9 @@ function getToken(): string | null {
     const userToken = localStorage.getItem("accessToken");
     return userToken ?? null;
 }
-function getUsername(): string | undefined {
+export function getUsername(): string | undefined {
     const username = localStorage.getItem('username')
-    return username ?? undefined
+    return username ?? ''
 }
 
 export const accessTokenState = atom({
@@ -31,3 +31,4 @@ export const allUsersState = atom<string[]>({
     key: 'allUsersState',
     default: []
 })
+

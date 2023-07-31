@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { useRecoilState } from 'recoil';
-import { userNameState, backendHostInURL, accessTokenState } from '../state_management/recoilState';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { userNameState, backendHostInURL, accessTokenState, getUsername } from '../state_management/recoilState';
 import { LoginFailed } from './LoginFailed';
 
 interface LoginResponse {
@@ -12,21 +12,17 @@ interface LoginResponse {
 
 const LoginPage: React.FC = () => {
     const [username, setUsername] = useRecoilState(userNameState);
-    const [accessToken, setAccessToken] = useRecoilState(accessTokenState)
-
+    const setAccessToken = useSetRecoilState(accessTokenState)
     const [loginFailed, setLoginFailed] = useState(false)
     const [password, setPassword] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [healthCheckResult, setHealthCheckResult] = useState<string>('');
-    const navigate = useNavigate();
 
     useEffect(() => {
-        if (accessToken) {
-            console.log("logged in!");
+        const storedUsername = getUsername();
+        if (storedUsername) {
+            setUsername(storedUsername);
         }
-        performHealthCheck();
-    }, [accessToken, navigate]);
-
+    }, []);
     const handleLogin = (event: React.FormEvent) => {
         event.preventDefault();
 
@@ -39,27 +35,15 @@ const LoginPage: React.FC = () => {
             password
         })
             .then((response) => {
-                console.log(response.data);
-
                 if (!response.data.accessToken) {
                     console.log('Login failed: Access token not found');
                     return;
                 }
-
-                console.log('Login successful:', response.data);
                 setAccessToken(response.data.accessToken);
                 localStorage.setItem('accessToken', response.data.accessToken);
                 setUsername(username)
                 localStorage.setItem('username', username as string);
 
-                // if (response.data.accessToken) {
-                //     console.log('Login successful:', response.data);
-                //     setAccessToken(response.data.accessToken);
-                //     localStorage.setItem('accessToken', response.data.accessToken);
-                //     localStorage.setItem('username', username);
-                // } else {
-                //     console.log('Login failed: Access token not found');
-                // }
             })
             .catch((error) => {
                 console.error('Login failed:', error);
@@ -70,27 +54,10 @@ const LoginPage: React.FC = () => {
             });
     };
 
-
-    const performHealthCheck = () => {
-
-        axios.get<string>(`${backendHostInURL}/health_check`)
-            .then((response) => {
-                console.log('Health check successful:', response.data);
-                setHealthCheckResult(response.data);
-            })
-            .catch((error) => {
-                console.error('Health check failed:', error);
-                setHealthCheckResult('Health check failed');
-            });
-    };
-
     return (
         <div className="container">
             <div className="row justify-content-center mt-5">
                 <div className="col-md-4">
-                    <div className="mb-3">
-                        <strong>Health Check Result:</strong> {healthCheckResult}
-                    </div>
                     <h2 className="mb-4">Login</h2>
                     <form onSubmit={handleLogin}>
                         <div className="mb-3">

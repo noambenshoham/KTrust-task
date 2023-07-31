@@ -6,6 +6,8 @@ import { isAdminHandler } from './routes/isAdmin';
 import { loginHandler } from './routes/login';
 import { getUsersHandler } from './routes/getUsers';
 import { authenticateToken } from './utils';
+import { createUserHandler } from './routes/admin_routes/createUser';
+import { deleteUserHandler } from './routes/admin_routes/deleteUser';
 
 const app = express();
 const port = 3000;
@@ -16,11 +18,9 @@ app.use(cors());
 app.get('/get_users', authenticateToken, getUsersHandler)
 app.get('/is_user_admin', authenticateToken, isAdminHandler);
 app.post('/login', loginHandler);
+app.post('/create_user', authenticateToken, createUserHandler)
+app.delete('/delete_user/:username', authenticateToken, deleteUserHandler);
 
-// Health check endpoint
-app.get('/health_check', (req, res) => {
-  res.send('success');
-});
 
 app.use((err: any, req: express.Request, res: express.Response) => {
   console.error(err.stack);

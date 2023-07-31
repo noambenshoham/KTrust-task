@@ -2,45 +2,50 @@ import React, { useEffect, useState } from 'react';
 import userSvg from '../assets/user.svg';
 // import { Link } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { userNameState, accessTokenState, backendHostInURL, isAdminState } from '../state_management/recoilState';
+import { userNameState, accessTokenState, backendHostInURL, isAdminState, allUsersState } from '../state_management/recoilState';
 import axios from 'axios';
+import DeleteUser from './admin_components/DeleteUser';
 
-interface getUsersResponse {
+export interface getUsersResponse {
     usernames: string[] | []
+}
+
+export async function getUsers(accessToken: string | null, username: string): Promise<getUsersResponse> {
+    try {
+        const response = await axios.get<getUsersResponse>(`${backendHostInURL}/get_users`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+            params: {
+                username: username,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Get usernames failed:', error);
+        throw error;
+    }
 }
 
 const ShowUsers: React.FC = () => {
     const username = useRecoilValue(userNameState)
     const accessToken = useRecoilValue(accessTokenState)
     const [isAdmin, setIsAdmin] = useRecoilState(isAdminState)
-    const [usernames, setUsernames] = useState<string[] | []>([])
-
+    // const [usernames, setUsernames] = useState<string[] | []>([])
+    const [usernames, setUsernames] = useRecoilState(allUsersState)
 
     useEffect(() => {
 
         if (accessToken) {
-            const api = axios.create({ baseURL: `${backendHostInURL}` });
-
-            api.get<getUsersResponse>(`/get_users`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-                params: {
-                    username: username,
-                },
-            })
-                .then((response) => {
-                    console.log(response.data);
-
-                    if (response.data.usernames) {
-                        setUsernames(response.data.usernames);
-                    } else {
-                        console.log('data.usernames is empty');
-                    }
+            getUsers(accessToken, '')
+                .then((response: getUsersResponse) => {
+                    console.log(response);
+                    setUsernames(response.usernames);
                 })
                 .catch((error) => {
-                    console.error('Get usernames failed:', error);
-                })
+                    console.log(error);
+
+                });
         }
     }, []);
     return (
@@ -52,7 +57,7 @@ const ShowUsers: React.FC = () => {
                         <div>
                             {username}
                         </div>
-                        {/* {isAdmin ? <EditUser /> : null} */}
+                        {isAdmin ? <DeleteUser username={username} /> : null}
                     </div>
                 </div>)
             }
