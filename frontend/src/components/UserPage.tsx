@@ -4,6 +4,7 @@ import userSvg from '../assets/user.svg';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userNameState, accessTokenState, backendHostInURL, isAdminState } from '../state_management/recoilState';
 import axios from 'axios';
+import ShowUsers from './ShowUsers';
 
 interface isAdminResponse {
     isAdmin: Boolean
@@ -40,15 +41,15 @@ const UserPage: React.FC = () => {
         }
     },);
     return (
-        <div className="card d-flex justify-content-center align-items-center flex-column">
+        <div className="card d-flex justify-content-center align-items-center flex-column user-card">
             <div className="text-center">
                 <img src={userSvg} alt="User Icon" className="user-profile-img" />
                 <div>
-                    {isAdmin ? <div>Hello admin</div> : null}
-                    Username:
+                    {isAdmin ? <div> Admin</div> : null}
+                    Hello {username}
                 </div>
+                <ShowUsers />
             </div>
-            <h2 className="mt-4">{username}</h2>
         </div>
     );
 };

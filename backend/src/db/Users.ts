@@ -1,7 +1,7 @@
 // db/Users.ts
 import mongoose from 'mongoose';
 
-export interface UserDocument extends mongoose.Document {
+interface UserDocument extends mongoose.Document {
     username: string;
     password: string;
     admin: boolean;

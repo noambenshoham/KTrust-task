@@ -1,8 +1,7 @@
 import React from 'react';
 import logoPath from '../assets/logo.png';
-import axios from 'axios';
-import { userNameState, accessTokenState, backendHostInURL, isAdminState } from '../state_management/recoilState';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { userNameState, accessTokenState } from '../state_management/recoilState';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 
 const Header: React.FC = () => {

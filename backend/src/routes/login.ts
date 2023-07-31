@@ -2,6 +2,7 @@
 import { Request, Response } from 'express';
 import { Users } from '../db/Users';
 import jwt from 'jsonwebtoken';
+import { JwtPayload } from 'jsonwebtoken';
 
 const jwt_secret_key = process.env.JWT_SECRET_KEY as string;
 
@@ -23,9 +24,9 @@ export async function loginHandler(req: Request, res: Response) {
         if (!isPasswordValid) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
-
+        const jwtPayload: JwtPayload = { userId: user._id, username: user.username, isAdmin: user.admin }
         // If credentials are valid, generate an access token using JWT
-        const accessToken = jwt.sign({ userId: user._id }, jwt_secret_key, { expiresIn: '1h' });
+        const accessToken = jwt.sign(jwtPayload, jwt_secret_key, { expiresIn: '1h' });
 
         return res.json({ accessToken });
     } catch (error) {
