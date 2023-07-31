@@ -34,7 +34,6 @@ const ShowUsers: React.FC = () => {
                 .then((response) => {
                     console.log(response.data);
 
-                    // use error guards
                     if (response.data.usernames) {
                         setUsernames(response.data.usernames);
                     } else {
@@ -42,22 +41,22 @@ const ShowUsers: React.FC = () => {
                     }
                 })
                 .catch((error) => {
-                    console.error('Get users failed:', error);
+                    console.error('Get usernames failed:', error);
                 })
         }
     }, []);
     return (
         <div className='users-container'>
-            {usernames.map((username, index) => <div className="card d-flex justify-content-center align-items-center flex-column user-card">
-                <div className="text-center" key={index}>
-                    <img src={userSvg} alt="User Icon" className="user-profile-img" />
-                    <div>
-                        {username}
+            {usernames.map((username, index) =>
+                <div key={index} className="card d-flex justify-content-center align-items-center flex-column user-card">
+                    <div className="text-center" >
+                        <img src={userSvg} alt="User Icon" className="user-profile-img" />
+                        <div>
+                            {username}
+                        </div>
+                        {/* {isAdmin ? <EditUser /> : null} */}
                     </div>
-                    {/* {isAdmin ? <EditUser /> : null} */}
-                </div>
-            </div>)}
-
+                </div>)}
         </div>
     );
 };

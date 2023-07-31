@@ -3,7 +3,7 @@ import { Users } from '../db/Users';
 import { getUsernameFromRequest } from '../utils';
 
 export async function getUsersHandler(req: Request, res: Response) {
-    const username = getUsernameFromRequest(req)
+    const username = await getUsernameFromRequest(req)
     try {
         const users = await Users.find({ username: { $ne: username } }).maxTimeMS(60000);
         if (!users) {

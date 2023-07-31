@@ -23,9 +23,6 @@ const UserPage: React.FC = () => {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
-                params: {
-                    username: username,
-                },
             })
                 .then((response) => {
                     if (response.data.isAdmin !== undefined) {

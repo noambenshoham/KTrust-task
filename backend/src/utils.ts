@@ -26,18 +26,16 @@ interface JwtPayload {
     isAdmin: boolean;
 }
 
-export function getUsernameFromRequest(req: Request) {
+export async function getUsernameFromRequest(req: Request) {
     const token = getTokenFromRequest(req)
-
     if (token) {
-        jwt.verify(token, jwt_secret_key, (err, decoded) => {
-            if (err) {
-                console.error('Invalid token:', err.message);
-            } else {
-                const decodedToken = decoded as JwtPayload
-                return decodedToken.username
-            }
-        })
+        try {
+            const decoded = jwt.verify(token, jwt_secret_key) as JwtPayload;
 
+            return decoded.username;
+        } catch (err) {
+            console.error('Invalid token:', err as any);
+            return null;
+        }
     }
 }

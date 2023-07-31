@@ -4,7 +4,8 @@ import { getUsernameFromRequest } from '../utils';
 
 
 export async function isAdminHandler(req: Request, res: Response) {
-    const username = getUsernameFromRequest(req)
+    const username = await getUsernameFromRequest(req)
+
     try {
         const user = await Users.findOne({ username }).maxTimeMS(60000);
         if (!user) {
