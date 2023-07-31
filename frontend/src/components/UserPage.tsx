@@ -38,16 +38,18 @@ const UserPage: React.FC = () => {
         }
     },);
     return (
-        <div className="card d-flex justify-content-center align-items-center flex-column user-card">
-            <div className="text-center">
-                <img src={userSvg} alt="User Icon" className="user-profile-img" />
-                <div>
-                    {isAdmin ? <div> Admin</div> : null}
-                    Hello {username}
+        <>
+            <div className="card d-flex justify-content-center align-items-center flex-column user-card">
+                <div className="text-center">
+                    <img src={userSvg} alt="User Icon" className="user-profile-img" />
+                    <div>
+                        {isAdmin ? <div> Admin</div> : null}
+                        Hello {username}
+                    </div>
                 </div>
-                <ShowUsers />
             </div>
-        </div>
+            <ShowUsers />
+        </>
     );
 };
 

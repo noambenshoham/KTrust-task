@@ -32,23 +32,34 @@ const LoginPage: React.FC = () => {
 
         setIsSubmitting(true); // Disable the submit button
 
-        const api = axios.create({ baseURL: `${backendHostInURL}` });
+        const api = axios.create({ baseURL: backendHostInURL });
 
         api.post<LoginResponse>(`/login`, {
-            username: username,
-            password: password
+            username,
+            password
         })
             .then((response) => {
                 console.log(response.data);
 
-                if (response.data.accessToken) {
-                    console.log('Login successful:', response.data);
-                    setAccessToken(response.data.accessToken);
-                    localStorage.setItem('accessToken', response.data.accessToken);
-                    localStorage.setItem('username', username);
-                } else {
+                if (!response.data.accessToken) {
                     console.log('Login failed: Access token not found');
+                    return;
                 }
+
+                console.log('Login successful:', response.data);
+                setAccessToken(response.data.accessToken);
+                localStorage.setItem('accessToken', response.data.accessToken);
+                setUsername(username)
+                localStorage.setItem('username', username);
+
+                // if (response.data.accessToken) {
+                //     console.log('Login successful:', response.data);
+                //     setAccessToken(response.data.accessToken);
+                //     localStorage.setItem('accessToken', response.data.accessToken);
+                //     localStorage.setItem('username', username);
+                // } else {
+                //     console.log('Login failed: Access token not found');
+                // }
             })
             .catch((error) => {
                 console.error('Login failed:', error);

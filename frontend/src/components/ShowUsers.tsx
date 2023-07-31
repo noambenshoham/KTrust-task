@@ -1,6 +1,3 @@
-
-
-
 import React, { useEffect, useState } from 'react';
 import userSvg from '../assets/user.svg';
 // import { Link } from "react-router-dom";
@@ -20,6 +17,7 @@ const ShowUsers: React.FC = () => {
 
 
     useEffect(() => {
+
         if (accessToken) {
             const api = axios.create({ baseURL: `${backendHostInURL}` });
 
@@ -48,7 +46,7 @@ const ShowUsers: React.FC = () => {
     return (
         <div className='users-container'>
             {usernames.map((username, index) =>
-                <div key={index} className="card d-flex justify-content-center align-items-center flex-column user-card">
+                <div key={index} className="showed-user card d-flex justify-content-center align-items-center flex-column user-card">
                     <div className="text-center" >
                         <img src={userSvg} alt="User Icon" className="user-profile-img" />
                         <div>
@@ -56,8 +54,9 @@ const ShowUsers: React.FC = () => {
                         </div>
                         {/* {isAdmin ? <EditUser /> : null} */}
                     </div>
-                </div>)}
-        </div>
+                </div>)
+            }
+        </div >
     );
 };
 
