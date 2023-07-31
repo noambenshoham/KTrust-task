@@ -50,7 +50,7 @@ const LoginPage: React.FC = () => {
                 setAccessToken(response.data.accessToken);
                 localStorage.setItem('accessToken', response.data.accessToken);
                 setUsername(username)
-                localStorage.setItem('username', username);
+                localStorage.setItem('username', username as string);
 
                 // if (response.data.accessToken) {
                 //     console.log('Login successful:', response.data);

@@ -5,6 +5,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { userNameState, accessTokenState, backendHostInURL, isAdminState } from '../state_management/recoilState';
 import axios from 'axios';
 import ShowUsers from './ShowUsers';
+import CreateUser from './CreateUser';
 
 interface isAdminResponse {
     isAdmin: Boolean
@@ -17,7 +18,7 @@ const UserPage: React.FC = () => {
 
     useEffect(() => {
         if (accessToken) {
-            const api = axios.create({ baseURL: `${backendHostInURL}` });
+            const api = axios.create({ baseURL: backendHostInURL });
 
             api.get<isAdminResponse>(`/is_user_admin`, {
                 headers: {
@@ -39,14 +40,15 @@ const UserPage: React.FC = () => {
     },);
     return (
         <>
-            <div className="card d-flex justify-content-center align-items-center flex-column user-card">
+            <div className="profile card d-flex justify-content-center align-items-center flex-column user-card">
                 <div className="text-center">
                     <img src={userSvg} alt="User Icon" className="user-profile-img" />
                     <div>
-                        {isAdmin ? <div> Admin</div> : null}
                         Hello {username}
                     </div>
                 </div>
+                {isAdmin ? <CreateUser /> : null}
+
             </div>
             <ShowUsers />
         </>
