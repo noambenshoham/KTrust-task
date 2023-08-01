@@ -1,0 +1,11 @@
+version: '3'
+services:
+  backend:
+    image: noambenshoham/ktrust_task_backend:1.0
+    ports:
+      - "3000:3000"
+
+  frontend:
+    image: noambenshoham/ktrust_task_frontend:1.0
+    ports:
+      - "5137:5137"

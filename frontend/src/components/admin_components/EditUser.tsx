@@ -12,7 +12,6 @@ const EditUser: React.FC<EditUserProps> = ({ username }) => {
     const [newUsername, setNewUsername] = useState(username);
     const [newPassword, setNewPassword] = useState('');
     const [isAdmin, setIsAdmin] = useState(false);
-    const [isEditing, setIsEditing] = useState(false);
     const [isUpdatingUser, setIsUpdatingUser] = useState(false);
     const [isUserUpdated, setIsUserUpdated] = useState(false);
     const [isFormOpen, setIsFormOpen] = useState(false);
