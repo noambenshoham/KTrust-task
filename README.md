@@ -6,6 +6,7 @@ This is a simple CRUD app that runs with:
 - React with TypeScript
 - [Recoil](https://recoiljs.org/) as the state management
 - Bootstrap for styling
+- Vite for fast and efficient development
 
 **Backend:**
 - Express.js with JWT token for server-side authentication and authorization
@@ -54,6 +55,9 @@ Frontend Client: http://localhost:5137
 
 Backend API: http://localhost:3000
 
-By running the docker-compose up -d command, Docker Compose will automatically build and start the frontend and backend services in separate containers. The -d flag runs the containers in detached mode, which means they will continue to run in the background.
+## Logging in as Admin
+To access the admin page, use the following credentials:
 
-Please ensure that you have Docker and Docker Compose installed on your system before running the application.
+Username: admin
+
+Password: admin
