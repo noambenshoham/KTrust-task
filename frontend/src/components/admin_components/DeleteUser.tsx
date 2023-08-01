@@ -22,9 +22,9 @@ const DeleteUser: React.FC<DeleteUserProps> = ({ username }) => {
                 Authorization: `Bearer ${accessToken}`,
             },
         })
-            .then((response) => {
+            .then((_response) => {
                 setIsDeleting(false);
-                getUsers(accessToken, '')
+                getUsers(accessToken)
                     .then((response: getUsersResponse) => {
                         console.log(response);
                         setUsernames(response.usernames);

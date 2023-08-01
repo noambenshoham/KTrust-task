@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { accessTokenState, backendHostInURL } from '../../state_management/recoilState';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { accessTokenState, allUsersState, backendHostInURL } from '../../state_management/recoilState';
 import axios from 'axios';
+import { getUsers, getUsersResponse } from '../ShowUsers';
 
 const CreateUser: React.FC = () => {
     const [newUsername, setNewUsername] = useState('');
@@ -11,6 +12,7 @@ const CreateUser: React.FC = () => {
     const [isUserCreated, setIsUserCreated] = useState(false);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const accessToken = useRecoilValue(accessTokenState);
+    const setUsernames = useSetRecoilState(allUsersState)
 
     const handleAddUser = () => {
 
@@ -30,8 +32,8 @@ const CreateUser: React.FC = () => {
                 },
             }
         )
-            .then((response) => {
-
+            .then((_response) => {
+                setIsFormOpen(false)
                 setIsCreatingUser(false);
                 setIsUserCreated(true);
 
@@ -43,7 +45,18 @@ const CreateUser: React.FC = () => {
                 // Hide the "User created successfully!" message after 10 seconds
                 setTimeout(() => {
                     setIsUserCreated(false);
-                }, 10000);
+                }, 5000);
+
+                // Refresh show users 
+                getUsers(accessToken)
+                    .then((response: getUsersResponse) => {
+                        console.log(response);
+                        setUsernames(response.usernames);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+
+                    });
             })
             .catch((error) => {
                 setIsCreatingUser(false);

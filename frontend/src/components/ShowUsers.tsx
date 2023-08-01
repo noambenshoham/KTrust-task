@@ -9,14 +9,11 @@ export interface getUsersResponse {
     usernames: string[] | []
 }
 
-export async function getUsers(accessToken: string | null, username: string): Promise<getUsersResponse> {
+export async function getUsers(accessToken: string | null): Promise<getUsersResponse> {
     try {
         const response = await axios.get<getUsersResponse>(`${backendHostInURL}/get_users`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
-            },
-            params: {
-                username: username,
             },
         });
         return response.data;
@@ -34,7 +31,7 @@ const ShowUsers: React.FC = () => {
     useEffect(() => {
 
         if (accessToken) {
-            getUsers(accessToken, '')
+            getUsers(accessToken)
                 .then((response: getUsersResponse) => {
                     console.log(response);
                     setUsernames(response.usernames);
