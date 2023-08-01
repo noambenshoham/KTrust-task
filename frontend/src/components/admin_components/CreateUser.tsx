@@ -31,6 +31,7 @@ const CreateUser: React.FC = () => {
             }
         )
             .then((response) => {
+
                 setIsCreatingUser(false);
                 setIsUserCreated(true);
 

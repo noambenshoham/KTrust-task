@@ -8,9 +8,15 @@ export function authenticateToken(req: Request, res: Response, next: any) {
     const token = getTokenFromRequest(req)
     if (token == null) return res.sendStatus(401);
 
+
     jwt.verify(token, jwt_secret_key, (err: jwt.VerifyErrors | null, user: any) => {
-        if (err) return res.sendStatus(403);
-        next();
+        if (err) {
+            if (err.name === 'TokenExpiredError') {
+                return res.status(401).json({ error: 'Token expired' });
+            } else {
+                return res.sendStatus(403);
+            }
+        } next();
     });
 }
 

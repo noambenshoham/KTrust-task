@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import userSvg from '../assets/user.svg';
-// import { Link } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { userNameState, accessTokenState, backendHostInURL, isAdminState, allUsersState } from '../state_management/recoilState';
+import { accessTokenState, backendHostInURL, isAdminState, allUsersState } from '../state_management/recoilState';
 import axios from 'axios';
 import DeleteUser from './admin_components/DeleteUser';
 
@@ -28,10 +27,8 @@ export async function getUsers(accessToken: string | null, username: string): Pr
 }
 
 const ShowUsers: React.FC = () => {
-    const username = useRecoilValue(userNameState)
     const accessToken = useRecoilValue(accessTokenState)
-    const [isAdmin, setIsAdmin] = useRecoilState(isAdminState)
-    // const [usernames, setUsernames] = useState<string[] | []>([])
+    const isAdmin = useRecoilValue(isAdminState)
     const [usernames, setUsernames] = useRecoilState(allUsersState)
 
     useEffect(() => {

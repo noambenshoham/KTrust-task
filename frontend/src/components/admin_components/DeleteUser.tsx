@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { accessTokenState, allUsersState, backendHostInURL } from '../../state_management/recoilState';
 import { getUsers, getUsersResponse } from '../ShowUsers';
 
