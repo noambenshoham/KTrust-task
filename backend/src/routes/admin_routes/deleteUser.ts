@@ -1,7 +1,7 @@
 import express from 'express';
 import { Users } from '../../db/Users';
 
-const deleteUserHandler = async (req: express.Request, res: express.Response) => {
+export const deleteUserHandler = async (req: express.Request, res: express.Response) => {
     const { username } = req.params;
 
     try {
@@ -13,4 +13,3 @@ const deleteUserHandler = async (req: express.Request, res: express.Response) =>
     }
 };
 
-export { deleteUserHandler };

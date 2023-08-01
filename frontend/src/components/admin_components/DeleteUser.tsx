@@ -12,6 +12,7 @@ const DeleteUser: React.FC<DeleteUserProps> = ({ username }) => {
     const accessToken = useRecoilValue(accessTokenState);
     const [isDeleting, setIsDeleting] = useState(false);
     const setUsernames = useSetRecoilState(allUsersState)
+
     const handleDeleteUser = () => {
         setIsDeleting(true);
 
@@ -44,7 +45,7 @@ const DeleteUser: React.FC<DeleteUserProps> = ({ username }) => {
     return (
         <button
             type="button"
-            className="btn btn-danger mt-3"
+            className="btn btn-danger"
             onClick={handleDeleteUser}
             disabled={isDeleting}
         >

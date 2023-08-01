@@ -18,8 +18,6 @@ const UserPage: React.FC = () => {
     const [showTokenExpired, setShowTokenExpired] = useState(true);
 
     const handleTokenExpired = () => {
-        console.log('hey');
-
         setShowTokenExpired(true);
         // Automatically log out after 10 seconds
         setTimeout(() => {

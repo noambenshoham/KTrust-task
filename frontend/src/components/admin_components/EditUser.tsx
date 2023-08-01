@@ -4,27 +4,32 @@ import { accessTokenState, allUsersState, backendHostInURL } from '../../state_m
 import axios from 'axios';
 import { getUsers, getUsersResponse } from '../ShowUsers';
 
-const CreateUser: React.FC = () => {
-    const [newUsername, setNewUsername] = useState('');
+interface EditUserProps {
+    username: string;
+}
+
+const EditUser: React.FC<EditUserProps> = ({ username }) => {
+    const [newUsername, setNewUsername] = useState(username);
     const [newPassword, setNewPassword] = useState('');
-    const [isAdminUser, setIsAdminUser] = useState<undefined | boolean>(undefined);
-    const [isCreatingUser, setIsCreatingUser] = useState(false);
-    const [isUserCreated, setIsUserCreated] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [isUpdatingUser, setIsUpdatingUser] = useState(false);
+    const [isUserUpdated, setIsUserUpdated] = useState(false);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const accessToken = useRecoilValue(accessTokenState);
-    const setUsernames = useSetRecoilState(allUsersState)
+    const setUsernames = useSetRecoilState(allUsersState);
 
-    const handleAddUser = () => {
-
-        setIsCreatingUser(true);
+    const handleUpdateUser = () => {
+        setIsUpdatingUser(true);
         const api = axios.create({ baseURL: backendHostInURL });
 
-        api.post(
-            '/create_user',
+        api.put(
+            '/update_user',
             {
+                oldUsername: username,
                 newUsername,
                 newPassword,
-                isAdmin: isAdminUser,
+                isAdmin,
             },
             {
                 headers: {
@@ -33,21 +38,21 @@ const CreateUser: React.FC = () => {
             }
         )
             .then((_response) => {
-                setIsFormOpen(false)
-                setIsCreatingUser(false);
-                setIsUserCreated(true);
+                setIsFormOpen(false);
+                setIsUpdatingUser(false);
+                setIsUserUpdated(true);
 
-                // Reset form after successful creation
-                setNewUsername('');
+                // Reset form after successful update
+                setNewUsername(username);
                 setNewPassword('');
-                setIsAdminUser(undefined);
+                setIsAdmin(false);
 
-                // Hide the "User created successfully!" message after 10 seconds
+                // Hide the "User updated successfully!"
                 setTimeout(() => {
-                    setIsUserCreated(false);
+                    setIsUserUpdated(false);
                 }, 5000);
 
-                // Refresh show users 
+                // Refresh show users
                 getUsers(accessToken)
                     .then((response: getUsersResponse) => {
                         console.log(response);
@@ -55,21 +60,20 @@ const CreateUser: React.FC = () => {
                     })
                     .catch((error) => {
                         console.log(error);
-
                     });
             })
             .catch((error) => {
-                setIsCreatingUser(false);
-                console.error('User creation failed:', error);
-                // TODO: Handle the user creation error
+                setIsUpdatingUser(false);
+                console.error('User update failed:', error);
+                // TODO: Handle the user update error
             });
     };
 
     return (
-        <div className="create-user-container">
-            {isUserCreated ? (
+        <div className="edit-user-container">
+            {isUserUpdated ? (
                 <div className="alert alert-success" role="alert">
-                    User created successfully!
+                    User updated successfully!
                 </div>
             ) : null}
             <div className="user-form">
@@ -80,30 +84,29 @@ const CreateUser: React.FC = () => {
                     aria-expanded={isFormOpen}
                     aria-controls="userForm"
                 >
-                    {isFormOpen ? 'Hide Form' : 'Add User'}
+                    {isFormOpen ? 'Hide Form' : 'Edit User'}
                 </button>
 
                 <div className={`collapse${isFormOpen ? ' show' : ''}`} id="userForm">
-                    <h2 className="mb-4">Add User</h2>
                     <div className="mb-3">
-                        <label htmlFor="username" className="form-label">
-                            Username:
+                        <label htmlFor="newUsername" className="form-label">
+                            New Username:
                         </label>
                         <input
                             type="text"
-                            id="username"
+                            id="newUsername"
                             className="form-control"
                             value={newUsername}
                             onChange={(e) => setNewUsername(e.target.value)}
                         />
                     </div>
                     <div className="mb-3">
-                        <label htmlFor="password" className="form-label">
-                            Password:
+                        <label htmlFor="newPassword" className="form-label">
+                            New Password:
                         </label>
                         <input
                             type="password"
-                            id="password"
+                            id="newPassword"
                             className="form-control"
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
@@ -114,11 +117,11 @@ const CreateUser: React.FC = () => {
                             <input
                                 type="checkbox"
                                 className="form-check-input"
-                                id="isAdminUser"
-                                checked={isAdminUser}
-                                onChange={(e) => setIsAdminUser(e.target.checked)}
+                                id="isAdmin"
+                                checked={isAdmin}
+                                onChange={(e) => setIsAdmin(e.target.checked)}
                             />
-                            <label className="form-check-label" htmlFor="isAdminUser">
+                            <label className="form-check-label" htmlFor="isAdmin">
                                 Is Admin User
                             </label>
                         </div>
@@ -126,10 +129,10 @@ const CreateUser: React.FC = () => {
                     <button
                         type="button"
                         className="btn btn-primary"
-                        onClick={handleAddUser}
-                        disabled={isCreatingUser || (!newPassword.trim() || !newUsername.trim())}
+                        onClick={handleUpdateUser}
+                        disabled={isUpdatingUser || (!newPassword.trim() || !newUsername.trim())}
                     >
-                        {isCreatingUser ? 'Creating...' : 'Add User'}
+                        {isUpdatingUser ? 'Updating...' : 'Save Changes'}
                     </button>
                 </div>
             </div>
@@ -137,4 +140,4 @@ const CreateUser: React.FC = () => {
     );
 };
 
-export default CreateUser;
+export default EditUser;

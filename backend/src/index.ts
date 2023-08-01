@@ -8,6 +8,7 @@ import { getUsersHandler } from './routes/getUsers';
 import { authenticateToken } from './utils';
 import { createUserHandler } from './routes/admin_routes/createUser';
 import { deleteUserHandler } from './routes/admin_routes/deleteUser';
+import { updateUserHandler } from './routes/admin_routes/updateUser';
 
 const app = express();
 const port = 3000;
@@ -20,7 +21,7 @@ app.get('/is_user_admin', authenticateToken, isAdminHandler);
 app.post('/login', loginHandler);
 app.post('/create_user', authenticateToken, createUserHandler)
 app.delete('/delete_user/:username', authenticateToken, deleteUserHandler);
-
+app.put('/update_user', authenticateToken, updateUserHandler)
 
 app.use((err: any, req: express.Request, res: express.Response) => {
   console.error(err.stack);

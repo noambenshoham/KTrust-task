@@ -4,6 +4,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { accessTokenState, backendHostInURL, isAdminState, allUsersState } from '../state_management/recoilState';
 import axios from 'axios';
 import DeleteUser from './admin_components/DeleteUser';
+import EditUser from './admin_components/EditUser';
 
 export interface getUsersResponse {
     usernames: string[] | []
@@ -51,8 +52,10 @@ const ShowUsers: React.FC = () => {
                         <div>
                             {username}
                         </div>
-                        {isAdmin ? <DeleteUser username={username} /> : null}
+
                     </div>
+                    {isAdmin ? <DeleteUser username={username} /> : null}
+                    {isAdmin ? <EditUser username={username} /> : null}
                 </div>)
             }
         </div >
